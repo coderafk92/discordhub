@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Sidebar from '@/components/layout/Sidebar';
 import { useAuthStore } from '@/lib/stores/authStore';
@@ -8,7 +8,7 @@ import { authService } from '@/lib/utils/authService';
 import { listingService } from '@/lib/utils/listingService';
 import { Listing } from '@/lib/types';
 
-export default function Marketplace() {
+function MarketplaceContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, loading } = useAuthStore();
@@ -264,5 +264,13 @@ export default function Marketplace() {
         </div>
       </div>
     </Sidebar>
+  );
+}
+
+export default function Marketplace() {
+  return (
+    <Suspense fallback={<div className="text-white">Loading...</div>}>
+      <MarketplaceContent />
+    </Suspense>
   );
 }
